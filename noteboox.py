@@ -75,6 +75,21 @@ def cargar_desde_archivo_pacientes():
         cargar_treeview()
     except FileNotFoundError:
         open("paciente.txt","w",encoding="utf-8").close()
+
+ #Funcion para eliminar paciente
+def eliminarPaciente():
+     seleccionado=treeview.selection()
+     if seleccionado:
+         indice=int(seleccionado[0])
+         id_item=seleccionado[0]
+         if messagebox.askyesno("Eliminar Paciente", f"¿Esta seguro de eliminar el paciente'{treeview.item(id_item,'values')[0]}'?"):
+             del paciente_data[indice]
+             guardar_en_archivo() #guardar los cambios en el archivo
+             cargar_treeview()
+             messagebox.showinfo("Eliminar Paciente","Paciente eliminado exitosamente >:P")
+     else:
+        messagebox.showwarning("Eliminar Paciente","No se ha seleccionado ningun paciente ( ._. )")
+        return
         
 #Lista de pacientes (inicialmente vacía)
 paciente_data=[]
@@ -183,7 +198,7 @@ btn_registrar.grid(row=8,column=0,padx=5,pady=5)
 btn_registrar.configure(bg="#96DBFC",fg="white")
 
 #boton eliminar
-btn_eliminar=tk.Button(btn_frame,text="Eliminar")
+btn_eliminar=tk.Button(btn_frame,text="Eliminar", command=eliminarPaciente)
 btn_eliminar.grid(row=8,column=1,padx=5)
 btn_eliminar.configure(bg="#690000",fg="white")
 
@@ -241,6 +256,8 @@ def registrarDoctores ():
         "Especialidad":tipo_especialidad.get(),
         "Telefono":telefonoEntry.get()
     }
+    
+    
     #agregar a la lista
     doctores_data.append(doctor)
         #linea modificada 07/09/2025
@@ -262,9 +279,23 @@ def cargar_treeview1():
                 itemm["Edad"],
                 itemm["Especialidad"],
                 itemm["Telefono"],
-                
+                ) 
             )
-        )
+        #Funcion para eliminar doctor
+def eliminarDoctor():
+    seleccionado1=treeview1.selection()
+    if seleccionado1:
+        indice=int(seleccionado1[0])
+        id_item1=seleccionado1[0]
+        if messagebox.askyesno("Eliminar Doctor", f"¿Esta seguro de eliminar el doctor'{treeview1.item(id_item1,'values')[0]}'?"):
+            del doctores_data[indice]
+            guardar_en_archivoDoc() #guardar los cambios en el archivo
+            cargar_treeview1()
+            messagebox.showinfo("Eliminar Doctor","Doctor eliminado exitosamente >:P ")
+        else:
+            messagebox.showwarning("Eliminar Doctor","No se ha seleccionado ningun doctor ( ._. )")
+            return
+        
 #nombre
 labelNombreD=tk.Label(frame_doctores,text="Nombre:")
 labelNombreD.grid(row=1,column=0,sticky="w",padx=5,pady=5)
@@ -301,7 +332,7 @@ btn_registrarD=tk.Button(btn_frameD,text="Registrar",command=registrarDoctores)
 btn_registrarD.grid(row=5,column=0,padx=5,pady=5)
 btn_registrarD.configure(bg="#90E6FC",fg="white")
 #boton eliminar
-btn_eliminarD=tk.Button(btn_frameD,text="Eliminar")
+btn_eliminarD=tk.Button(btn_frameD,text="Eliminar", command=eliminarDoctor)
 btn_eliminarD.grid(row=5,column=1,padx=5)
 btn_eliminarD.configure(bg="#580303",fg="white")
 
